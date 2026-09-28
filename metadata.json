@@ -1,0 +1,6 @@
+{
+  "name": "Kapital Kitchen | Rahim Yar Khan",
+  "description": "A typography-driven digital experience and editorial showcase for Kapital Kitchen, Rahim Yar Khan. Good Food. Good Mood.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
