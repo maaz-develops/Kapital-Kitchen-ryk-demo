@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { X, Clock, Flame, Utensils, Check, Sparkles } from 'lucide-react';
 import { DishItem } from '../data/restaurantData';
@@ -9,6 +10,16 @@ interface DishDetailModalProps {
 }
 
 export default function DishDetailModal({ dish, onClose, onReserveClick }: DishDetailModalProps) {
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    if (dish) {
+      window.addEventListener('keydown', handleKeyDown);
+    }
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [dish, onClose]);
+
   if (!dish) return null;
 
   return (

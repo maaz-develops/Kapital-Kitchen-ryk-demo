@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { X, Search, Sparkles, Utensils, Check } from 'lucide-react';
 import { MENU_CATEGORIES, SIGNATURE_DISHES, RESTAURANT_INFO } from '../data/restaurantData';
@@ -20,6 +20,16 @@ export default function MenuModal({
     initialCategory || MENU_CATEGORIES[0].id
   );
   const [searchQuery, setSearchQuery] = useState('');
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    if (isOpen) {
+      window.addEventListener('keydown', handleKeyDown);
+    }
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
 
   if (!isOpen) return null;
 

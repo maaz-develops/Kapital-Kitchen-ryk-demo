@@ -1,11 +1,12 @@
-import { useState, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { ArrowRight, ArrowLeft } from 'lucide-react';
 
 export default function CenterEditorialBranding() {
+  const track1Ref = useRef<HTMLDivElement>(null);
+  const track2Ref = useRef<HTMLDivElement>(null);
   const lastScrollY = useRef(0);
   const offsetRef = useRef(0);
   const targetOffsetRef = useRef(0);
-  const [trackOffset, setTrackOffset] = useState(0);
 
   useEffect(() => {
     let rafId: number;
@@ -24,7 +25,13 @@ export default function CenterEditorialBranding() {
       // Subtle ambient baseline drift + responsive scroll dampening
       targetOffsetRef.current += 0.2;
       offsetRef.current += (targetOffsetRef.current - offsetRef.current) * 0.075;
-      setTrackOffset(offsetRef.current);
+      const val = offsetRef.current;
+      if (track1Ref.current) {
+        track1Ref.current.style.transform = `translate3d(${-(val * 0.5) % 480}px, 0, 0)`;
+      }
+      if (track2Ref.current) {
+        track2Ref.current.style.transform = `translate3d(${(val * 0.5) % 480}px, 0, 0)`;
+      }
       rafId = requestAnimationFrame(updateMotion);
     };
 
@@ -49,10 +56,8 @@ export default function CenterEditorialBranding() {
         {/* Track 1: KAPITAL KITCHEN → → → (Moves smoothly rightwards on scroll down, left on scroll up) */}
         <div className="w-full max-w-full overflow-hidden whitespace-nowrap">
           <div
-            style={{
-              transform: `translate3d(${-(trackOffset * 0.5) % 480}px, 0, 0)`,
-              willChange: 'transform',
-            }}
+            ref={track1Ref}
+            style={{ willChange: 'transform' }}
             className="inline-flex items-center gap-6 sm:gap-10 md:gap-14 text-[clamp(1.75rem,5.5vw,4.5rem)] font-display font-black tracking-tight sm:tracking-tighter uppercase text-[#F7F7F2]"
           >
             {[...Array(6)].map((_, i) => (
@@ -68,10 +73,8 @@ export default function CenterEditorialBranding() {
         {/* Track 2: ← ← ← RAHIM YAR KHAN (Moves smoothly counter-directionally) */}
         <div className="w-full max-w-full overflow-hidden whitespace-nowrap">
           <div
-            style={{
-              transform: `translate3d(${(trackOffset * 0.5) % 480}px, 0, 0)`,
-              willChange: 'transform',
-            }}
+            ref={track2Ref}
+            style={{ willChange: 'transform' }}
             className="inline-flex items-center gap-6 sm:gap-10 md:gap-14 text-[clamp(1.4rem,4.5vw,3.8rem)] font-display font-black tracking-tight sm:tracking-tighter uppercase text-outline"
           >
             {[...Array(6)].map((_, i) => (

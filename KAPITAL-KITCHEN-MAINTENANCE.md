@@ -311,14 +311,15 @@ Returns minimal operational status without leaking system paths, secrets, or arc
 ---
 
 ## 18. ENVIRONMENT VARIABLES
-See `.env.example`:
+See `.env.example` (clean public repository template with safe non-functional placeholders):
 - `PORT`: Server port (defaults to `3000`).
-- `APP_URL`: Host application URL.
-- `AUTH_SECRET`: Strong 256-bit secret string for token signing.
-- `ADMIN_USERNAME`: Admin login username (defaults to `admin`).
-- `ADMIN_PASSWORD_HASH`: Pre-computed bcrypt hash of admin password.
-- `CORS_ORIGIN`: Allowed production origins.
-- `MONGODB_URI`: Optional MongoDB connection string (never commit real secrets).
+- `NODE_ENV`: `production`.
+- `APP_URL`: Host application URL (`https://your-domain.example`).
+- `AUTH_SECRET`: Strong 256-bit secret string placeholder for HMAC token signing (`your_auth_secret_minimum_32_characters_here`).
+- `ADMIN_USERNAME`: Admin login username placeholder (`your_admin_username`).
+- `ADMIN_PASSWORD_HASH`: Non-functional bcrypt hash placeholder (`replace_with_generated_bcrypt_hash`).
+- `CORS_ORIGIN`: Allowed production origins (`https://your-domain.example`).
+- `MONGODB_URI`: Generic MongoDB connection string placeholder (`your_mongodb_connection_string`).
 
 ---
 
@@ -463,3 +464,19 @@ npm run preview
 - [x] `.gitignore` comprehensive against `.env*` and logs.
 - [x] Secret audit passed: zero keys, tokens, or personal paths in repository.
 - [x] Asset filename case audit passed on Linux.
+- [x] Dependency conflict resolution: removed conflicting `esbuild ^0.25.0` pin to match `vite@8.3.1` requirement (`^0.28.2`).
+- [x] Both `package-lock.json` and `bun.lock` synchronized without `--force` or `--legacy-peer-deps`.
+- [x] GPU kinetic typography refactored to direct ref style transforms (0 state re-renders/sec).
+- [x] Modal accessibility: Escape key navigation enabled across all modals.
+
+---
+
+## 33. DEPENDENCY & LOCKFILE ARCHITECTURE
+- **Vite & esbuild Compatibility**: `vite@8.3.1` specifies peerOptional `esbuild@^0.27.0 || ^0.28.0`.
+  - Never add an outdated `esbuild` version (e.g. `^0.25.0`) to `devDependencies`.
+  - Vite automatically bundles and manages its own compatible esbuild binary (`esbuild@0.28.2`).
+- **Synchronized Lockfiles**:
+  - `package-lock.json`: Generated via clean `npm install` without `--force` or `--legacy-peer-deps`.
+  - `bun.lock`: Synchronized via `bun install`.
+  - Ensures seamless setup whether developer uses `npm install` or `bun install`.
+

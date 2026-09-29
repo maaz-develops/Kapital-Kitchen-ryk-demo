@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { ArrowUp, MapPin, Phone, Instagram, Facebook, ArrowRight, ArrowLeft } from 'lucide-react';
 import { RESTAURANT_INFO } from '../data/restaurantData';
 
@@ -8,10 +8,11 @@ export default function Footer() {
   };
 
   // Scroll-direction motion for bottom editorial typography
+  const track1Ref = useRef<HTMLDivElement>(null);
+  const track2Ref = useRef<HTMLDivElement>(null);
   const lastScrollY = useRef(0);
   const offsetRef = useRef(0);
   const targetOffsetRef = useRef(0);
-  const [trackOffset, setTrackOffset] = useState(0);
 
   useEffect(() => {
     let rafId: number;
@@ -29,7 +30,13 @@ export default function Footer() {
     const updateMotion = () => {
       // Smooth dampening towards target
       offsetRef.current += (targetOffsetRef.current - offsetRef.current) * 0.08;
-      setTrackOffset(offsetRef.current);
+      const val = offsetRef.current;
+      if (track1Ref.current) {
+        track1Ref.current.style.transform = `translate3d(${-(val * 0.4) % 360}px, 0, 0)`;
+      }
+      if (track2Ref.current) {
+        track2Ref.current.style.transform = `translate3d(${(val * 0.4) % 360}px, 0, 0)`;
+      }
       rafId = requestAnimationFrame(updateMotion);
     };
 
@@ -129,10 +136,8 @@ export default function Footer() {
           {/* Track 1: KAPITAL KITCHEN -> -> -> */}
           <div className="w-full overflow-hidden whitespace-nowrap">
             <div
-              style={{
-                transform: `translate3d(${-(trackOffset * 0.4) % 360}px, 0, 0)`,
-                willChange: 'transform',
-              }}
+              ref={track1Ref}
+              style={{ willChange: 'transform' }}
               className="inline-flex items-center gap-6 sm:gap-10 text-[clamp(1.5rem,4.5vw,3.5rem)] font-display font-black tracking-tighter text-[#F7F7F2]/40 uppercase"
             >
               {[...Array(6)].map((_, i) => (
@@ -148,10 +153,8 @@ export default function Footer() {
           {/* Track 2: <- <- <- RAHIM YAR KHAN */}
           <div className="w-full overflow-hidden whitespace-nowrap">
             <div
-              style={{
-                transform: `translate3d(${(trackOffset * 0.4) % 360}px, 0, 0)`,
-                willChange: 'transform',
-              }}
+              ref={track2Ref}
+              style={{ willChange: 'transform' }}
               className="inline-flex items-center gap-6 sm:gap-10 text-[clamp(1.2rem,3.8vw,3rem)] font-display font-black tracking-tight text-outline uppercase"
             >
               {[...Array(6)].map((_, i) => (
